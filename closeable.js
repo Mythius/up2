@@ -1,0 +1,1 @@
+function ev(){for(var e=0;e<a.length;e++)a[e].style.width="500px",a[e].querySelector(".closer").addEventListener("click",function(){var e=this.parentElement;collapse(e)})}function cl(e){var t=Number(e.style.width.replace(/[a-z]/gi,""));t>0?(e.style.width=t-10+"px",requestAnimationFrame(function(){cl(e)})):e.remove()}ev();
