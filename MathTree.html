@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Canvas</title>
+		<style>
+			canvas{
+				background-color: gray;
+			}
+		</style>
+	</head>
+	<body>
+	<canvas width=800 height=600></canvas>
+	<script>
+		var Pen=function(ctx){
+			var x=0;
+			var y=0;
+			var dir=0;
+			var down=false;
+			this.down=function(){
+				down=true;
+			};
+			this.up=function(){
+				down=false;
+			};
+			function toRadians(d){
+				return d*Math.PI/180;
+			}
+			this.setDir=function(d){
+				dir=toRadians(d);
+			};
+			this.goTo=function(tx,ty){
+				if(down){
+					ctx.lineTo(tx,ty);
+					ctx.stroke();
+				} else {
+					ctx.moveTo(tx,ty);
+				}
+				x=tx;
+				y=ty;
+			};
+			this.turn=function(d){
+				dir+=toRadians(d);
+			};
+			this.move=function(s){
+				var tx=x+s*Math.cos(dir);
+				var ty=y-s*Math.sin(dir);
+				if(down){
+					ctx.lineTo(tx,ty);
+					ctx.stroke();
+				} else {
+					ctx.moveTo(tx,ty);
+				}
+				x=tx;
+				y=ty;
+			};
+			this.getPos=function(){
+				return {x:x,y:y};
+			}
+		}
+		
+		var canvas=document.querySelector('canvas');
+		var ctx=canvas.getContext('2d');
+		var p = new Pen(ctx);
+		
+		p.goTo(400,600);
+		p.down();
+		p.setDir(90);
+		p.move(100);
+		drawBranch(200,45,7);
+		
+		function drawBranch(l,a,b){
+			p.turn(90);
+			for(let i=0;i<3;i++){
+				p.turn(-a);
+				p.move(l);
+				if(b>1){
+					drawBranch(l/2,a,b-1);
+				}
+				p.move(-l);
+			}
+			p.turn(a);
+		}
+		
+		
+	</script>
+</html>
